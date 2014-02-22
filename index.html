@@ -39,7 +39,7 @@
     </ul>
 	<h3>1.2 Define the key concepts of the Java Persistence API (entity, entity manager and persistence unit)</h3>
 	<ul>
-		<li><strong>Entity</strong> (default) - POJO class with additional meta-data defining persistence of the entity into DB. Entity has these characteristics:
+		<li><strong>Entity</strong> - is simple POJO class with additional meta-data defining persistence of the entity's state into DB. Entity has these characteristics:
 			<ul>
 				<li>Persistability</li>
 				<li>Identity</li>
@@ -59,18 +59,97 @@
 <h3>Describe the implementation model for the auction system</h3>
 
 <h2>3. Java Persistence API Entities</h2>
+<p>Chapter 4 - Page 69</p>
+<h3>3.1 Describe the difference between objects and entities</h3>
+<h3>3.2 Describe the difference between persistent fields and properties</h3>
+<p>Accessing Entity State??? - Page 70</p>
+	<h3>3.3 Identify and use common Java Persistence API annotations, such as @Entity, @Id, @Table, and @Column</h3>
+	<ul>
+		<li>@Entity - to turn POJO class into entity</li>
+		<li>@Table - to specify name of mapped DB table (when default is not enough)</li>
+		<li>@Basic - to define (optionally) attribute as persistable</li>
+		<li>@Id - page 81</li>
+		<li>@Column - to specify properties/constraints of the field in DB table</li>
+    </ul>
+	<p>Example:</p>
+	<pre class="prettyprint"><code class="language-java">@Entity
+@Table(name="CUST", schema="POC"))
+public class CustomTable {
 
-<h3>Describe the difference between objects and entities</h3>
-<h3>Describe the difference between persistent fields and properties</h3>
-<h3>Identify and use common Java Persistence API annotations, such as @Entity, @Id, @Table, and @Column</h3>
+	@Id
+	@Column(name="CUST_ID")
+	private int id;
 
+	@Column(name="CUST_COMMENT")
+	private String comment;
+
+	@Basic(fetch=FetchType.LAZY)
+	@LOB
+	@Column(name="CUST_IMAGE")
+	private byte[] img;
+
+	@Temporal(TemporalType.DATE)
+	private Calendar validFrom;	
+}</code></pre>
+	<h4>3.3.1 Annotation @Entity</h4>
+	<ul>
+		<li>Entity can be any class with a no-arg constructor.</li>
+		<li>Default table name (if not specified) is unqualified entity class name.</li>
+		<li>Needs to have persistent identity (define with @Id on the any field).</li>
+		<li>Each of the field/property has its own state.</li>
+    </ul>
+	<h4>3.3.2 Annotation @Table</h4>
+	<ul>
+		<li>Attribute <strong>name</strong> - table name in DB</li>
+		<li>Attribute <strong>schema</strong> - name of the schema in DB</li>
+		<li>Names are not case sensitive (depends on used DB)</li>
+    </ul>
+	<h4>3.3.3 Annotation @Id</h4>
+	<ul>
+		<li>Applies same rules as for @Base and @Column annotations.</li>
+		<li>Mapping is restricted to allowed Java types (generally almost all primitive types)</li>
+		<li>TODO: continue on page 82</li>
+    </ul>
+	<h4>3.3.4 Annotation @Column</h4>
+	<ul>
+		<li>Attribute <strong>name</strong> - fields name in DB (in the table)</li>
+		<li>Attributes <strong>unique</strong>, <strong>nullable</strong>, <strong>length</strong>, <strong>precision</strong> and <strong>scale</strong> - field properties in DB</li>
+		<li>Attribute <strong>insertable</strong> - whether the column is included in SQL INSERT</li>
+		<li>Attribute <strong>updatable</strong> - whether the column is included in SQL UPDATE</li>
+		<li>Attribute <strong>columnDefinition</strong> - the SQL fragment that is used when generating the DDL for the column.</li>
+		<li>Attribute <strong>table</strong> - the name of the table that contains the column. If absent the column is assumed to be in the primary table.</li>
+    </ul>
+	<h4>3.3.5 Others</h4>
+	<ul>
+		<li>Use annotation <strong>@Base</strong> and attribute <strong>fetch</strong> to specify type of value loading. Values are:
+			<ul>
+				<li><strong>LAZY</strong> ... lazy loading (when value is accessed)</li>
+				<li><strong>EAGER</strong> ... loading immediately (when loading from DB)</li>
+			</ul>
+		</li>
+		<li>Use annotation <strong>@LOB</strong> to identify (for persistence provider) mapping for large object as:
+			<ul>
+				<li><strong>String</strong> ... for CLOBs (characters)</li>
+				<li><strong>byte[]</strong> ... for BLOBs (bytes)</li>
+			</ul>
+		</li>
+		<li>Use annotation <strong>@Temporal</strong> to identify (for persistence provider) java.util types (date/time field). Mandatory is define attribute <strong>value</strong> with date type as:
+			<ul>
+				<li><strong>DATE</strong> ... for java.sql.Date, java.util.Date or java.util.Calendar</li>
+				<li><strong>TIME</strong> ... for java.sql.Time</li>
+				<li><strong>TIMESTAMP</strong> ... for java.sql.Timestamp</li>
+			</ul>
+		</li>
+		<li>Use annotation <strong>@Transient</strong> to identify (for persistence provider) field which is not allowed to be persisted (load/store its state).</ul>
+		</li>
+    </ul>
 <h2>4. Understanding the Entity Manager</h2>
 
 <h3>Describe the relationship between an entity manager, a persistence context, and a persistence unit</h3>
 <h3>Describe the difference between a container-managed entity manager and an application-managed entity manager</h3>
 <h3>Describe the entity life cycle</h3>
 
-<h2>5. Modeling Entity Relationships</h2>
+<h2>5. Modelling Entity Relationships</h2>
 
 <h3>Examine association relationships in the data and object models</h3>
 <h3>Use relationship properties to define associations</h3>
@@ -94,6 +173,7 @@
 <h2>7. Persisting Enums and Collections</h2>
 
 <h3>Persist entities that contain enums with @Enumerated</h3>
+<p>page 78</p>
 <h3>Persist entities that contain lists with @ElementCollection</h3>
 <h3>Persist entities that contain maps with @ElementCollection</h3>
 
