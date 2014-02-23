@@ -107,8 +107,81 @@ public class CustomTable {
 	<h4>3.3.3 Annotation @Id</h4>
 	<ul>
 		<li>Applies same rules as for @Base and @Column annotations.</li>
-		<li>Mapping is restricted to allowed Java types (generally almost all primitive types)</li>
-		<li>TODO: continue on page 82</li>
+		<li>Mapping is restricted to some (allowed) Java types (generally almost all primitive types)</li>
+		<li>Annotation <strong>@GeneratedValue</strong> and its attribute <strong>strategy</strong> specifies the type of a generation for new ID. The types are AUTO, TABLE, SEQUENCE, or IDENTITY.</li>
+    </ul>
+	<p><font color='blue' size="3">Type <strong>Auto</strong></font>
+	<ul>
+		<li>Used to delegated the strategy to JPA provider</li>
+		<li>Note: chosen strategy may require special DB privileges (e.g. to create DB table or sequence)</li>
+		<li>Note: this is usually used for development only</li>
+    </ul>
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@Id
+	<strong>@GeneratedValue(strategy=GenerationType.AUTO)</strong>
+	private int id;
+}</code></pre>
+	<p><font color='blue' size="3">Type <strong>Table</strong></font>
+	<ul>
+		<li>Used to store values (for next values - similar to sequence) in DB table</li>
+		<li>Auto approach (to let JPA provider take care about table):
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@Id
+	<strong>@GeneratedValue(strategy=GenerationType.TABLE)</strong>
+	private int id;
+}</code></pre>
+		</li>
+		<li>Explicit approach (to define necessary values):
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+	
+	@Id 
+	<strong>@TableGenerator(name="Cust_Gen", table="CUST_ID", pkColumnName="GEN_NAME", valueColumnName="GEN_VAL", initialValue=10000, allocationSize=100)</strong>
+	@GeneratedValue(generator="Cust_Gen")
+	private int id;
+}</code></pre>
+		</li>
+    </ul>
+	<p><font color='blue' size="3">Type <strong>Sequence</strong></font>
+	<ul>
+		<li>Used to read next values from DB sequence (when supported by DB itself - e.g. Oracle)</li>
+		<li>Auto approach (to let JPA provider take care about sequence):
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@Id
+	<strong>@GeneratedValue(strategy=GenerationType.SEQUENCE))</strong>
+	private int id;
+}</code></pre>
+		</li>
+		<li>Explicit approach (to define necessary values):
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+	
+	@Id
+	<strong>@SequenceGenerator(name="Cust_Gen", sequenceName="Cust_Seq", initialValue=10000, allocationSize=100)</strong>
+	@GeneratedValue(generator="Cust_Gen")
+	private int id;
+}</code></pre>
+		</li>
+    </ul>
+	<p><font color='blue' size="3">Type <strong>Identity</strong></font>
+	<ul>
+		<li>Used to read next values from identity field(when supported by DB itself - e.g. MySQL)</li>
+		<li>Note: new identity value is assigned after SQL insertm usually after DB commit.</li>
+		<li>Only approach (there is no generatir annotation) si:
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@Id
+	<strong>@GeneratedValue(strategy=GenerationType.IDENTITY)</strong>
+	private int id;
+}</code></pre>
+		</li>
     </ul>
 	<h4>3.3.4 Annotation @Column</h4>
 	<ul>
