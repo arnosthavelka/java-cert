@@ -31,15 +31,15 @@
 	<h2>1. Overview of the Java Persistence API</h2>
 
 	<h3>1.1 Describe the basics of Object Relational Mapping (ORM)</h3>
-	<p>Page 2</p>
+	<p>ORM is solution of automatic mapping of object to relation model (and vice versa).</p>
 	<ul>
-		<li>TODO</li>
-		<li>TODO</li>
-		<li>TODO</li>
+		<li>Class representation - known as the entity.</li>
+		<li>Relationships - interactions between two entities.</li>
+		<li>Inheritance - generalization of entity properties and relationships + polymorphism in the application.</li>
     </ul>
 	<h3>1.2 Define the key concepts of the Java Persistence API (entity, entity manager and persistence unit)</h3>
 	<ul>
-		<li><strong>Entity</strong> - is simple POJO class with additional meta-data defining persistence of the entity's state into DB. Entity has these characteristics:
+		<li><strong>Entity</strong> - is a simple POJO class with additional meta-data (as annotation or XML) defining persistence of the entity's state into DB. Entity has these characteristics:
 			<ul>
 				<li>Persistability</li>
 				<li>Identity</li>
@@ -47,10 +47,11 @@
 				<li>Granularity</li>
 			</ul>
 		</li>
-		<li><strong>Entity manager</strong> - TODO</li>
-		<li><strong>Persistence unit</strong> - TODO</li>
-		<li><strong>Persistence context</strong> - TODO</li>
+		<li><strong>Entity manager</strong> (EM)- is an persistence provider (represented by API/interface named EntityManager) to provide all queries and CRUD operations on entities. It's created from EntityManagerFactory (many EM can be created from one EMF).</li>
+		<li><strong>Persistence unit</strong> - is equivalent to EntityManagerFactory. This means configuration (settings) and set of entities to be available in EMs.</li>
+		<li><strong>Persistence context</strong> - is a set of entities managed by EM. Only one entity (represented by unique ID) can exist at any time.</li>
     </ul>
+	TODO: image on page 23?
 
 <h2>2. Introducing the Auction Application</h2>
 
