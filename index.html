@@ -69,7 +69,7 @@
 		<li>@Entity - to turn POJO class into entity</li>
 		<li>@Table - to specify name of mapped DB table (when default is not enough)</li>
 		<li>@Basic - to define (optionally) attribute as persistable</li>
-		<li>@Id - page 81</li>
+		<li>@Id - to define entity's identity (usually primary key)</li>
 		<li>@Column - to specify properties/constraints of the field in DB table</li>
     </ul>
 	<p>Example:</p>
@@ -220,19 +220,43 @@ public class CustomTable {
 <h2>4. Understanding the Entity Manager</h2>
 
 <h3>Describe the relationship between an entity manager, a persistence context, and a persistence unit</h3>
+<p>page 23</p>
 <h3>Describe the difference between a container-managed entity manager and an application-managed entity manager</h3>
 <h3>Describe the entity life cycle</h3>
 
-<h2>5. Modelling Entity Relationships</h2>
+	<h2>5. Modelling Entity Relationships</h2>
 
-<h3>Examine association relationships in the data and object models</h3>
-<h3>Use relationship properties to define associations</h3>
-<h3>Implement one-to-one unidirectional associations</h3>
-<h3>Implement one-to-one bidirectional associations</h3>
-<h3>Implement many-to-one/one-to-many bidirectional associations</h3>
-<h3>Implement many-to-many bidirectional associations</h3>
-<h3>Implement many-to-many unidirectional associations</h3>
-<h3>Examine fetch and cascade mode settings</h3>
+	<h3>5.1 Examine association relationships in the data and object models</h3>
+		<ul>
+			<li><strong>Data</strong> - is realized in DB (usually by FK). We know/recognize these associations:
+				<ul>
+					<li>ID is stored in source table (ideal option)</li>
+					<li>ID is stored in target table</li>
+					<li>New mapping (middle) table is introduced</li>
+				</ul>
+			</li>
+			<li><strong>Object models</strong> is mapped as single value (*-to-one) or collection (*-to-many). The exact mapping depends on association properties.</li>
+		</ul>
+	<h3>5.2 Use relationship properties to define associations</h3>
+	<ul>
+		<li><strong>Directionality</strong> - consists of:
+			<ul>
+				<li>Direction - source entity (owner of the relationship) points to target entity (mapped table)</li>
+				<li>Type - <strong>unidirectional</strong> (source->target) and <strong>bidirectional</strong> (source<->target)</li>
+			</ul>
+		</li>
+		<li><strong>Cardinality</strong> - defines how many entities (one or many) exists on each side (source and target)</li>
+		<li><strong>Ordinality</strong> - defines whether the side may have entity at all (instance not exists - zero	)</li>
+	</ul>
+<h3>5.3 Implement one-to-one unidirectional associations</h3>
+<p>page 93</p>
+<h3>5.4 Implement one-to-one bidirectional associations</h3>
+<p>page 94</p>
+<h3>5.5 Implement many-to-one/one-to-many bidirectional associations</h3>
+<p>page 90 (many-to-one) / ? (one-to-many)</p>
+<h3>5.6 Implement many-to-many bidirectional associations</h3>
+<h3>5.7 Implement many-to-many unidirectional associations</h3>
+<h3>5.8 Examine fetch and cascade mode settings</h3>
 
 <h2>6. Entity Inheritance and Object-Relational Mapping</h2>
 
