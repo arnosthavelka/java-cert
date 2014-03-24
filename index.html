@@ -68,10 +68,46 @@
 	</ul>
 	<h3>3.2 Describe the difference between persistent fields and properties</h3>
 	<ul>
-		<li><strong>Fields</strong> - the provider uses reflection to read/write data</li>
-		<li><strong>Properties</strong> - the provider uses getters/setters to read/write data</li>
+		<li><strong>Field Access</strong> - the provider uses reflection to read/write data (annotate entity's field).
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+<strong>	@Column(name="FIRST_NAME")
+	private String name;</strong>
+	
+	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
+}</code></pre>
+		</li>
+		<li><strong>Property access</strong> - the provider uses getters/setters to read/write data (annotate entity's getter method).
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	private String name;
+	
+	<strong>@Column(name="FIRST_NAME")
+	public String getName() { return name; }</strong>
+	public void setName(String name) { this.name = name; }
+}</code></pre>
+		</li>
+		<li><strong>Mixed access</strong> - the both approaches (field and property accesses) can be combined in a mixed style. Then the default style has to be defined by annotation <strong>@Access</strong>.
+	<pre class="prettyprint"><code class="language-java">@Entity
+<strong>@Access(AccessType.FIELD)</strong>
+public class CustomTable {
+
+	private String name;
+	private String phoneNumber;
+	
+	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
+
+	<strong>@Access(AccessType.PROPERTY)
+	@Column(name="PHONE")
+	public String getPhoneNumber() { return phoneNumber; }</strong>
+	public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+}</code></pre>
+		</li>
 	</ul>
-	<p>Accessing Entity State??? - Page 70, DI - page 49</p>
 	<h3>3.3 Identify and use common Java Persistence API annotations, such as @Entity, @Id, @Table, and @Column</h3>
 	<ul>
 		<li>@Entity - to turn POJO class into entity</li>
