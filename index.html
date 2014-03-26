@@ -262,11 +262,56 @@ public class CustomTable {
 		</li>
     </ul>
 <h2>4. Understanding the Entity Manager</h2>
-
-<h3>Describe the relationship between an entity manager, a persistence context, and a persistence unit</h3>
+<p>Chapter 4 - Page 131</p>
+<h3>4.1 Describe the relationship between an entity manager, a persistence context, and a persistence unit</h3>
 <p>page 23</p>
-<h3>Describe the difference between a container-managed entity manager and an application-managed entity manager</h3>
-<h3>Describe the entity life cycle</h3>
+	<h3>4.2 Describe the difference between a container-managed entity manager and an application-managed entity manager</h3>
+	<h4>4.2.1 Container-managed entity manager</h4>
+	<p>All EM are managed (usually by proxy) by the container (in JavaEE). This EM has these variants:</p>
+	<ul>
+		<li><strong>Transaction-Scoped</strong> - EM depends on JTA, usually used in stateless processing. If the code is out of transaction, then the changes are not tracked and persisted into the DB.
+
+	<pre class="prettyprint"><code class="language-java">@Stateless
+public class MyServiceBean implements MyService {
+	<strong>@PersistenceContext(unitName="MyServiceUnit")
+	EntityManager em;</strong>
+
+	public void addItem(int entityId, String newValue) {
+	CustomTable ct = em.find(CustomTable.class, entityId);
+	ct.getDataList().add(value);
+	}
+}		
+</code></pre>
+		</li>
+		<li><strong>Extended</strong> - the purpose is for stateful bean (conversational scenario). EM is defined by type EXTENDED.
+	<pre class="prettyprint"><code class="language-java">@Stateful
+public class MyServiceBean implements MyService {
+	<strong>@PersistenceContext(unitName="MyServiceUnit", type=PersistenceContextType.EXTENDED))
+	EntityManager em;</strong>
+	
+	private CustomTable ct;
+	
+	public void init(int entityId) {
+		CustomTable ct = em.find(CustomTable.class, entityId);
+	}
+	public void addItem(String newValue) {
+		ct.getDataList().add(value);
+	}
+
+	@Remove
+	public void finished() {
+	}
+}		
+</code></pre>
+		</li>
+	</ul>
+	<h4>4.2.2 Application-managed entity manager</h4>
+	<p>page 136</p>
+	<ul>
+		<li><strong>aaa</strong> ... todo</li>
+		<li><strong>bbb</strong> ... todo</li>
+	</ul>
+<h3>4.3 Describe the entity life cycle</h3>
 
 	<h2>5. Modelling Entity Relationships</h2>
 
@@ -314,12 +359,107 @@ public class CustomTable {
 
 <h2>7. Persisting Enums and Collections</h2>
 
-<h3>Persist entities that contain enums with @Enumerated</h3>
+<h3>7.1 Persist entities that contain enums with @Enumerated</h3>
 <p>page 78</p>
-<h3>Persist entities that contain lists with @ElementCollection</h3>
+<h3>7.2 Persist entities that contain lists with @ElementCollection</h3>
 <p>page 107</p>
-<h3>Persist entities that contain maps with @ElementCollection</h3>
-<p>page 114</p>
+	<ul>
+		<li>collection vs. list vs. set - page 110</li>
+		<li>oderring - page 111</li>
+	</ul>
+
+	<h3>7.3 Persist entities that contain maps with @ElementCollection</h3>
+	<p>page 114</p>
+	<ul>
+		<li><strong>Basic type</strong> - mapping basic Java type (e.g. String).
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@ElementCollection
+	<strong>@CollectionTable(name="CUST_DATA_LIST")
+	@MapKeyColumn(name="LIST_KEY")
+	@Column(name="LIST_VALUE")
+	<strong>private Map&lt;String, String&gt; dataList;</strong>
+}</code></pre>
+		</li>
+		<li><strong>Enumerated key</strong> - the key is just regular Java Enum.
+	<pre class="prettyprint"><code class="language-java">@Entity
+public enum KeyEnum { Foo, Hoo, Boo }
+public class CustomTable {
+
+	@ElementCollection
+	<strong>@MapKeyEnumerated(EnumType.STRING)</strong>
+	private Map&lt;<strong>KeyEnum</strong>, String&gt; dataList;
+}</code></pre>
+		</li>
+		<li><strong>Entity Attribute</strong> - the key is read from reference entity's attribute (value in the map).
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@ElementCollection
+	@CollectionTable(name="CUST_DATA_LIST")
+	@MapKey(name="id")
+	<strong>private Map&lt;Integer, String&gt; dataList;</strong>
+}</code></pre>
+		</li>
+		<li>TO CONTINUE ....(page 120) <strong>Embeddable Type</strong> - the key is embeddable object.
+	<pre class="prettyprint"><code class="language-java">@Embeddable
+public class CustName {
+@Column(name="C_NAME")
+private String first_Name;
+@Column(name="C_NAME")
+private String last_Name;
+// ...
+}
+@Entity
+public class CustomTable {
+
+
+@ManyToMany
+@JoinTable(name="DEPT_EMP",
+joinColumns=@JoinColumn(name="DEPT_ID"),
+inverseJoinColumns=@JoinColumn(name="EMP_ID"))
+@AttributeOverrides({
+@AttributeOverride(
+name="first_Name",
+column=@Column(name="EMP_FNAME")),
+@AttributeOverride(
+name="last_Name",
+column=@Column(name="EMP_LNAME"))
+})
+private Map<EmployeeName, Employee> employees;
+
+	@ElementCollection
+	@CollectionTable(name="CUST_DATA_LIST")
+	@MapKeyColumn(name="LIST_KEY")
+	@Column(name="LIST_VALUE")
+	<strong>private Map&lt;Integer, String&gt; dataList;</strong>
+}</code></pre>
+		</li>
+		<li>TODO ************<strong>Basic type</strong> - mapping basic Java type (e.g. String).
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@ElementCollection
+	@CollectionTable(name="CUST_DATA_LIST")
+	@MapKeyColumn(name="LIST_KEY")
+	@Column(name="LIST_VALUE")
+	<strong>private Map&lt;Integer, String&gt; dataList;</strong>
+}</code></pre>
+		</li>
+		<li>TODO ************<strong>Basic type</strong> - mapping basic Java type (e.g. String).
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class CustomTable {
+
+	@ElementCollection
+	@CollectionTable(name="CUST_DATA_LIST")
+	@MapKeyColumn(name="LIST_KEY")
+	@Column(name="LIST_VALUE")
+	<strong>private Map&lt;Integer, String&gt; dataList;</strong>
+}</code></pre>
+		</li>
+	</ul>
+
 <h2>8. Introduction to Querying</h2>
 
 <h3>Find an Entity by its primary key</h3>
