@@ -262,14 +262,17 @@ public class CustomTable {
 		</li>
     </ul>
 <h2>4. Understanding the Entity Manager</h2>
-<p>Chapter 4 - Page 131</p>
 <h3>4.1 Describe the relationship between an entity manager, a persistence context, and a persistence unit</h3>
-<p>page 23</p>
+	<ul>
+		<li><strong>Persistence unit</strong> - set of entity classes (handled together)</li>
+		<li><strong>Persistence context</strong> set of entity instances handled by entity manager(s) (constrained by persistence unit)</li>
+		<li><strong>Entity manager</strong> - manages/handles persistence context</li>
+	</ul>
 	<h3>4.2 Describe the difference between a container-managed entity manager and an application-managed entity manager</h3>
 	<h4>4.2.1 Container-managed entity manager</h4>
-	<p>All EM are managed (usually by proxy) by the container (in JavaEE). This EM has these variants:</p>
+	<p>EMs are (by default or usually) managed by the container (in JavaEE). The container takes care about persistence context lifecycle (creation and closure) - usually by proxying. This type of EM has these variants:</p>
 	<ul>
-		<li><strong>Transaction-Scoped</strong> - EM depends on JTA, usually used in stateless processing. If the code is out of transaction, then the changes are not tracked and persisted into the DB.
+		<li><strong>Transaction-Scoped</strong> - EM depends on JTA, usually used in stateless processing. If the code is out of transaction, then the changes are not tracked and synchronized(persisted) with DB .
 
 	<pre class="prettyprint"><code class="language-java">@Stateless
 public class MyServiceBean implements MyService {
@@ -306,13 +309,44 @@ public class MyServiceBean implements MyService {
 		</li>
 	</ul>
 	<h4>4.2.2 Application-managed entity manager</h4>
-	<p>page 136</p>
+	<p>Application-managed EM has to be handled manually (by the application) and is used in JavaSE (created for) and JavaEE. <strong>EM has to be (as mentioned) created (and closed) from EMF manually</strong>. We cam use it in that way:</p>
 	<ul>
-		<li><strong>aaa</strong> ... todo</li>
-		<li><strong>bbb</strong> ... todo</li>
+		<li><strong>JavaSE</strong> - EM depends on JTA, usually used in stateless processing. If the code is out of transaction, then the changes are not tracked and synchronized(persisted) with DB. Class Persistence has
+		two (overloaded) method to create EMF: just persistence unit name and persistence unit name + properties (to override persistence.xml).
+
+	<pre class="prettyprint"><code class="language-java">public class MyServiceClient {
+	public static void main(String[] args) {
+		<strong>EntityManagerFactory emf = Persistence.createEntityManagerFactory("MyServiceUnit");
+		EntityManager em = emf.createEntityManager();</strong>
+		List<CustomTable> data = em.createQuery("SELECT ct FROM CustomTable ct").getResultList();
+		// TODO business logic
+		em.close();
+		emf.close();
+	}
+}	
+</code></pre>
+		</li>
+		<li><strong>JavaEE</strong> - the purpose is for stateful bean (conversational scenario). EM is defined by type EXTENDED.
+	<pre class="prettyprint"><code class="language-java">public class SomeServlet extends HttpServlet {
+	<strong>@PersistenceUnit(unitName="MyServiceUnit")
+	EntityManagerFactory emf;</strong>
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+		// check valid user
+		<strong>EntityManager em = emf.createEntityManager();</strong>
+		try {
+			CustomTable ct = em.find(CustomTable.class, request.getParameter("id"));
+			// TODO business logic
+		} finally {
+			<strong>em.close();</strong>
+		}
+	}
+}
+</code></pre>
+		</li>
 	</ul>
 <h3>4.3 Describe the entity life cycle</h3>
-
+<p><font color="red">Page 138 + around</font></p>
 	<h2>5. Modelling Entity Relationships</h2>
 
 	<h3>5.1 Examine association relationships in the data and object models</h3>
@@ -486,7 +520,7 @@ public class CustomTable {
 <h3>Use the Java Persistence API from a stateless session bean</h3>
 
 <h2>12. Implementing Transactions and Locking</h2>
-
+<p>page 138</p>
 <h3>Describe the transaction demarcation management</h3>
 <h3>Implement container-managed transactions (CMT)</h3>
 <h3>Interact programmatically with an ongoing CMT transaction</h3>
