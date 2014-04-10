@@ -52,9 +52,8 @@
 <h3>Define the domain objects of the auction application</h3>
 <h3>Describe the implementation model for the auction system</h3>
 
-<h2>3. Java Persistence API Entities</h2>
-<p>Chapter 4 - Page 69</p>
-<h3>3.1 Describe the difference between objects and entities</h3>
+	<h2>3. Java Persistence API Entities</h2>
+	<h3>3.1 Describe the difference between objects and entities</h3>
 	<ul>
 		<li><strong>Object</strong> - is a any Java class</li>
 		<li><strong>Entity</strong> - is a simple POJO class with additional meta-data (as annotation or XML) defining persistence of the entity's state into DB. Entity has these characteristics:
@@ -345,8 +344,20 @@ public class MyServiceBean implements MyService {
 </code></pre>
 		</li>
 	</ul>
-<h3>4.3 Describe the entity life cycle</h3>
-<p><font color="red">Page 138 + around</font></p>
+	<h3>4.3 Describe the entity life cycle</h3>
+	<ul>
+		<li><strong>Entity class</strong> - relates to persistence unit</li>
+		<li><strong>Entity instance</strong> (instance of entity class with concrete/unique identity) - relates to persistence context</li>
+		<li>The life cycle depends on entity manager types, which are:
+			<ul>
+				<li><strong>Transaction-Scoped Persistence Contexts</strong> - <font color="red">Page 139</font></li>
+				<li><strong>Extended Persistence Contexts</strong> - <font color="red">Page 141</font></li>
+				<li><strong>Application-Managed Persistence Contexts</strong> - <font color="red">Page 144</font></li>
+				<li><strong></strong> - </li>
+			</ul>
+		</li>
+	</ul>
+
 	<h2>5. Modelling Entity Relationships</h2>
 
 	<h3>5.1 Examine association relationships in the data and object models</h3>
