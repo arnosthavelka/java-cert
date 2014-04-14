@@ -348,14 +348,35 @@ public class MyServiceBean implements MyService {
 	<ul>
 		<li><strong>Entity class</strong> - relates to persistence unit</li>
 		<li><strong>Entity instance</strong> (instance of entity class with concrete/unique identity) - relates to persistence context</li>
-		<li>The life cycle depends on entity manager types, which are:
+		<li>The entity life cycle depends on type of entity manager. JPA define these types:
 			<ul>
-				<li><strong>Transaction-Scoped Persistence Contexts</strong> - <font color="red">Page 139</font></li>
-				<li><strong>Extended Persistence Contexts</strong> - <font color="red">Page 141</font></li>
-				<li><strong>Application-Managed Persistence Contexts</strong> - <font color="red">Page 144</font></li>
-				<li><strong></strong> - </li>
+				<li><strong>Transaction-Scoped Persistence Contexts</strong></li>
+				<li><strong>Extended Persistence Contexts</strong></li>
+				<li><strong>Application-Managed Persistence Contexts</strong></li>
 			</ul>
 		</li>
+	</ul>
+	<h4>4.3.1 Transaction-Scoped Persistence Context</h4>
+	<ul>
+		<li>Behaviour: life cycle follows/relates to transaction's life cycle</li>
+		<li>Start: lazy creation during the transaction (when EM is invoked with no persistence context)</li>
+		<li>End: when the transaction completes</li>
+		<li>Propagation: same as JTA</li>
+	</ul>
+	<h4>4.3.2 Extended Persistence Context</h4>
+	<ul>
+		<li>Behaviour: life cycle follows/relates to EJB's life cycle. EM always use same persistence context</li>
+		<li>Start: when EJB is created (eager creation)</li>
+		<li>End: when EJB is removed</li>
+		<li>Propagation: if extended persistence context (from EJB) exists when transaction-scoped EM is accessed than persistence context is shared (used by transaction-scoped components as well)</li>
+	</ul>
+	<h4>4.3.3 Application-Managed Persistence Context</h4>
+	TODO - <font color="red">Page 144</font>
+	<ul>
+		<li>Behaviour: life cycle follows/relates to EJB's life cycle. EM always use same persistence context</li>
+		<li>Start: when EJB is created (eager creation)</li>
+		<li>End: when EJB is removed</li>
+		<li>Propagation: if extended persistence context (from EJB) exists when transaction-scoped EM is accessed than persistence context is shared (used by transaction-scoped components as well)</li>
 	</ul>
 
 	<h2>5. Modelling Entity Relationships</h2>
