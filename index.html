@@ -44,7 +44,7 @@
 		<li><strong>Persistence unit</strong> - is equivalent to EntityManagerFactory. This means configuration (settings) and set of entities to be available in EMs.</li>
 		<li><strong>Persistence context</strong> - is a set of entities managed by EM. Only one entity (represented by unique ID) can exist at any time.</li>
     </ul>
-	TODO: image on page 23?
+	<font color="red">TODO - image on page 23?</font>
 
 <h2>2. Introducing the Auction Application</h2>
 <p><font color='red'>Is it relevant?</font></p>
@@ -371,7 +371,7 @@ public class MyServiceBean implements MyService {
 		<li>Propagation: if extended persistence context (from EJB) exists when transaction-scoped EM is accessed than persistence context is shared (used by transaction-scoped components as well)</li>
 	</ul>
 	<h4>4.3.3 Application-Managed Persistence Context</h4>
-	TODO - <font color="red">Page 144</font>
+	<font color="red">TODO - Page 144</font>
 	<ul>
 		<li>Behaviour: life cycle follows/relates to EJB's life cycle. EM always use same persistence context</li>
 		<li>Start: when EJB is created (eager creation)</li>
@@ -404,11 +404,11 @@ public class MyServiceBean implements MyService {
 		<li><strong>Ordinality</strong> - defines whether the side may have entity at all (instance not exists - zero	)</li>
 	</ul>
 <h3>5.3 Implement one-to-one unidirectional associations</h3>
-<p>page 93</p>
+<p><font color="red">TODO - page 93</font></p>
 <h3>5.4 Implement one-to-one bidirectional associations</h3>
-<p>page 94</p>
+<p><font color="red">TODO - page 94</font></p>
 <h3>5.5 Implement many-to-one/one-to-many bidirectional associations</h3>
-<p>page 90 (many-to-one) / ? (one-to-many)</p>
+<p><font color="red">TODO - page 90</font> (many-to-one) / ? (one-to-many)</p>
 <h3>5.6 Implement many-to-many bidirectional associations</h3>
 <h3>5.7 Implement many-to-many unidirectional associations</h3>
 <h3>5.8 Examine fetch and cascade mode settings</h3>
@@ -426,16 +426,16 @@ public class MyServiceBean implements MyService {
 <h2>7. Persisting Enums and Collections</h2>
 
 <h3>7.1 Persist entities that contain enums with @Enumerated</h3>
-<p>page 78</p>
+<p><font color="red">TODO - page 78</font></p>
 <h3>7.2 Persist entities that contain lists with @ElementCollection</h3>
-<p>page 107</p>
+<p><font color="red">TODO - page 107</font></p>
 	<ul>
-		<li>collection vs. list vs. set - page 110</li>
-		<li>oderring - page 111</li>
+		<li>collection vs. list vs. set - <font color="red">TODO - page 110</font></li>
+		<li>ordering - <font color="red">TODO - page 111</font></li>
 	</ul>
 
 	<h3>7.3 Persist entities that contain maps with @ElementCollection</h3>
-	<p>page 114</p>
+	<p><font color="red">TODO - page 114</font></p>
 	<ul>
 		<li><strong>Basic type</strong> - mapping basic Java type (e.g. String).
 	<pre class="prettyprint"><code class="language-java">@Entity
@@ -468,32 +468,25 @@ public class CustomTable {
 	<strong>private Map&lt;Integer, String&gt; dataList;</strong>
 }</code></pre>
 		</li>
-		<li>TO CONTINUE ....(page 120) <strong>Embeddable Type</strong> - the key is embeddable object.
+		<li><font color="red">TODO - page 120</font> <strong>Embeddable Type</strong> - the key is embeddable object.
 	<pre class="prettyprint"><code class="language-java">@Embeddable
 public class CustName {
-@Column(name="C_NAME")
-private String first_Name;
-@Column(name="C_NAME")
-private String last_Name;
-// ...
+	@Column(name="C_NAME")
+	private String first_Name;
+	@Column(name="C_NAME")
+	private String last_Name;
+	// ...
 }
+
 @Entity
 public class CustomTable {
-
-
-@ManyToMany
-@JoinTable(name="DEPT_EMP",
-joinColumns=@JoinColumn(name="DEPT_ID"),
-inverseJoinColumns=@JoinColumn(name="EMP_ID"))
-@AttributeOverrides({
-@AttributeOverride(
-name="first_Name",
-column=@Column(name="EMP_FNAME")),
-@AttributeOverride(
-name="last_Name",
-column=@Column(name="EMP_LNAME"))
-})
-private Map<EmployeeName, Employee> employees;
+	@ManyToMany
+	@JoinTable(name="DEPT_EMP", joinColumns=@JoinColumn(name="DEPT_ID"), inverseJoinColumns=@JoinColumn(name="EMP_ID"))
+	@AttributeOverrides({
+		@AttributeOverride(name="first_Name",column=@Column(name="EMP_FNAME")),
+		@AttributeOverride(name="last_Name",column=@Column(name="EMP_LNAME"))
+	})
+	private Map&lt;CustName, Employee&gt; employees;
 
 	@ElementCollection
 	@CollectionTable(name="CUST_DATA_LIST")
@@ -502,7 +495,7 @@ private Map<EmployeeName, Employee> employees;
 	<strong>private Map&lt;Integer, String&gt; dataList;</strong>
 }</code></pre>
 		</li>
-		<li>TODO ************<strong>Basic type</strong> - mapping basic Java type (e.g. String).
+		<li><font color="red">TODO - page 123</font><strong>Entity type</strong> - TODO.
 	<pre class="prettyprint"><code class="language-java">@Entity
 public class CustomTable {
 
@@ -513,7 +506,7 @@ public class CustomTable {
 	<strong>private Map&lt;Integer, String&gt; dataList;</strong>
 }</code></pre>
 		</li>
-		<li>TODO ************<strong>Basic type</strong> - mapping basic Java type (e.g. String).
+		<li><font color="red">TODO - page 124</font><strong>Without type</strong> - mapping without generics (types).
 	<pre class="prettyprint"><code class="language-java">@Entity
 public class CustomTable {
 
@@ -552,7 +545,7 @@ public class CustomTable {
 <h3>Use the Java Persistence API from a stateless session bean</h3>
 
 <h2>12. Implementing Transactions and Locking</h2>
-<p>page 138</p>
+<p><font color="red">TODO - page 138</font></p>
 <h3>Describe the transaction demarcation management</h3>
 <h3>Implement container-managed transactions (CMT)</h3>
 <h3>Interact programmatically with an ongoing CMT transaction</h3>
@@ -563,7 +556,7 @@ public class CustomTable {
 
 <h3>Specify composite primary keys</h3>
 <h3>Override mappings with the @AttributeOverride and @AssociationOverride annotations</h3>
-<p>page 110</p>
+<p><font color="red">TODO - page 110</font></p>
 <h3>Understand entity listeners and callback methods</h3>
 
 </body>
