@@ -411,8 +411,31 @@ public class MyServiceBean implements MyService {
 <p><font color="red">TODO - page 90</font> (many-to-one) / ? (one-to-many)</p>
 <h3>5.6 Implement many-to-many bidirectional associations</h3>
 <h3>5.7 Implement many-to-many unidirectional associations</h3>
-<h3>5.8 Examine fetch and cascade mode settings</h3>
-
+	<h3>5.8 Examine fetch and cascade mode settings</h3>
+<h4>5.8.1 Fetch</h4>
+<p><font color="red">TODO - page ???</font></p>
+	<h4>5.8.2 Cascade mode</h4>
+	<ul>
+		<li>EM works only with specified instances of entity by default.</li>
+		<li>Cascade types are defined in enumeration CascadeType for these methods (which corresponds to enumeration values):
+			<ul>
+				<li><strong>persist()</strong> - cascade settings has to be defined on each relationship side
+				</li>
+				<li><strong>remove()</strong> - <font color="red">TODO - page 155</font></li>
+				<li><strong>detach()</strong> - <font color="red">TODO - chapter 11</font></li>
+				<li><strong>merge()</strong> - <font color="red">TODO - chapter 11</font></li>
+			</ul>
+		</li>
+	</ul>
+	<pre class="prettyprint"><code class="language-java">@Entity
+public class Contact {
+	// ...
+	@OneToMany(<strong>cascade={CascadeType.PERSIST, CascadeType.REMOVE}</strong>)
+	Collection&lt;Item&gt; items;
+	// ...
+}
+</code></pre>
+	
 <h2>6. Entity Inheritance and Object-Relational Mapping</h2>
 
 <h3>Examine entity inheritance</h3>
