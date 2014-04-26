@@ -288,7 +288,7 @@ public class MyServiceBean implements MyService {
 		<li><strong>Extended</strong> - the purpose is for stateful bean (conversational scenario). EM is defined by type EXTENDED.
 	<pre class="prettyprint"><code class="language-java">@Stateful
 public class MyServiceBean implements MyService {
-	<strong>@PersistenceContext(unitName="MyServiceUnit", type=PersistenceContextType.EXTENDED))
+	<strong>@PersistenceContext(unitName="MyServiceUnit", type=PersistenceContextType.EXTENDED)
 	EntityManager em;</strong>
 	
 	private CustomTable ct;
@@ -371,14 +371,64 @@ public class MyServiceBean implements MyService {
 		<li>Propagation: if extended persistence context (from EJB) exists when transaction-scoped EM is accessed than persistence context is shared (used by transaction-scoped components as well)</li>
 	</ul>
 	<h4>4.3.3 Application-Managed Persistence Context</h4>
-	<font color="red">TODO - Page 144</font>
+	<h5>4.3.3.1 Using JTA</h5>
 	<ul>
-		<li>Behaviour: life cycle follows/relates to EJB's life cycle. EM always use same persistence context</li>
-		<li>Start: when EJB is created (eager creation)</li>
-		<li>End: when EJB is removed</li>
-		<li>Propagation: if extended persistence context (from EJB) exists when transaction-scoped EM is accessed than persistence context is shared (used by transaction-scoped components as well)</li>
+		<li>Behaviour: life cycle is governed manually (not by the container). There can be any number of AM persistence context synchronized with JTA 
+		(CM persistence context can be only one).</li>
+		<li>Start: automatically when JTA is already in process or by calling method <strong>joinTransaction()</strong></li>
+		<li>End: when EM is close, but flush si done on JTA commit</li>
+		<li>Propagation: none</li>
 	</ul>
+	<pre class="prettyprint"><code class="language-java">@Stateful
+public class MyServiceBean implements MyService {
+	@PersistenceContext(unitName="MyServiceUnit")
+	<strong>EntityManagerFactory emf;</strong>
+	EntityManager em;
+	
+	private CustomTable ct;
+	
+	public void init(int entityId) {
+		<strong>em = emf.createEntityManager();</strong>
+		CustomTable ct = em.find(CustomTable.class, entityId);
+	}
+	public void addItem(String newValue) {
+		<strong>em.joinTransaction();</strong> // force synchronization of persistence context with JTA
+		ct.getDataList().add(value);
+	}
 
+	@Remove
+	public void finished() {
+		<strong>em.close();</strong>
+	}
+}		
+</code></pre>	
+	<h5>4.3.3.2 User transaction (sharing EM)</h5>
+	<ul>
+		<li>Behaviour: same as for JTA (chapter 4.3.3.1)</li>
+		<li>Start: when EM is created - <strong>EM is not thread safe</strong></li>
+		<li>End: when EM is closed</li>
+		<li>Propagation: none</li>
+	</ul>
+	<pre class="prettyprint"><code class="language-java">public class SomeServlet extends HttpServlet {	
+	<strong>@PersistenceUnit(unitName="MyServiceUnit")
+	EntityManagerFactory emf;</strong>
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+		// ...
+		tx.begin();
+		EntityManager em = emf.createEntityManager();
+		try {
+			CustomTable ct = em.find(CustomTable.class, request.getParameter("id"));
+			ct.getDataList().add(request.getParameter("value"));
+			service.createEmployee(id, name, salary);
+		} finally {
+			em.close();
+		}
+		tx.commit();
+		// ...
+	}
+}
+</code></pre>
 	<h2>5. Modelling Entity Relationships</h2>
 
 	<h3>5.1 Examine association relationships in the data and object models</h3>
