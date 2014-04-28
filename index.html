@@ -469,9 +469,19 @@ public class MyServiceBean implements MyService {
 		<li>EM works only with specified instances of entity by default.</li>
 		<li>Cascade types are defined in enumeration CascadeType for these methods (which corresponds to enumeration values):
 			<ul>
-				<li><strong>persist()</strong> - cascade settings has to be defined on each relationship side
+				<li><strong>persist()</strong>:
+					<ul>
+						<li>Cascade settings allows to persist unmanaged entities (by persistence context). If unmanaged entities exists and cascade settings is not defined then exception is raised.</li>
+						<li>Cascade settings has to be defined on each side of the relationship.</li>
+					</ul>
 				</li>
-				<li><strong>remove()</strong> - <font color="red">TODO - page 155</font></li>
+				<li><strong>remove()</strong>:
+					<ul>
+						<li>Makes sense for parent-child relationship (e.g. on-to-one or one-to-many)</li>
+						<li>Removed entities are deleted/removed in database, but not in memory (they will remain there till next GC run.)</li>
+						<li>Recommendation: merge entity with persistence context before delete - to avoid exception when target entity is not managed</li>
+					</ul>
+				</li>
 				<li><strong>detach()</strong> - <font color="red">TODO - chapter 11</font></li>
 				<li><strong>merge()</strong> - <font color="red">TODO - chapter 11</font></li>
 			</ul>
