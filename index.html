@@ -482,8 +482,18 @@ public class MyServiceBean implements MyService {
 						<li>Recommendation: merge entity with persistence context before delete - to avoid exception when target entity is not managed</li>
 					</ul>
 				</li>
-				<li><strong>detach()</strong> - <font color="red">TODO - chapter 11</font></li>
-				<li><strong>merge()</strong> - <font color="red">TODO - chapter 11</font></li>
+				<li><strong>detach()</strong>
+					<ul>
+						<li>Makes entity out of scope of persistence context.</li>
+						<li>Method <strong>clear()</strong> makes entities detached.</li>
+					</ul>
+				</li>
+				<li><strong>merge()</strong>
+					<ul>
+						<li>To synchronize entity with persistence context (make it manageable).</li>
+						<li>The managed entity is returned by merge() method (the original entity is still unmanaged).</li>
+					</ul>
+				</li>
 			</ul>
 		</li>
 	</ul>
