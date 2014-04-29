@@ -535,7 +535,7 @@ public class Contact {
 public class CustomTable {
 
 	@ElementCollection
-	<strong>@CollectionTable(name="CUST_DATA_LIST")
+	<strong>@CollectionTable(name="CUST_DATA_LIST")</strong>
 	@MapKeyColumn(name="LIST_KEY")
 	@Column(name="LIST_VALUE")
 	<strong>private Map&lt;String, String&gt; dataList;</strong>
@@ -612,12 +612,41 @@ public class CustomTable {
 		</li>
 	</ul>
 
-<h2>8. Introduction to Querying</h2>
+	<h2>8. Introduction to Querying</h2>
+	<p><font color="red">TODO - page 179</font></p>
+<h3>8.1 Find an Entity by its primary key</h3>
 
-<h3>Find an Entity by its primary key</h3>
-<h3>Understand basic Java Persistence API query language queries</h3>
-<h3>Understand native SQL queries</h3>
-<h3>Understand basic Criteria API queries</h3>
+	<h3>8.2 Understand basic Java Persistence API query language queries</h3>
+	<ul>
+		<li>Very similar to SQL, except JPA works with entities (instead of columns).</li>
+		<li>Support for filtering by whole entity.</li>
+		<li>Parameters: positional (?1, ?2, etc.) or named (:foo, :hoo, etc), date/time parameters must be specified from enumeration TemporalType.</li>
+		<li>Queries: dynamic (built in runtime), named (allowed only in entity class), executing (<font color="red">TODO - page 188</font>)</li>
+		<li></li>
+		<li></li>
+	</ul>
+	<pre class="prettyprint"><code class="language-java">@Entity
+@NamedQueries({
+	@NamedQuery(name="CustomTable.findAll", query="SELECT ct FROM CustomTable ct"),
+	@NamedQuery(name="CustomTable.findInstance", query="SELECT ct FROM CustomTable ct WHERE ct.id = :id"),
+})
+public class CustomTable {
+	// ...
+}
+
+public class MyBean {
+	@PersistenceContext(unitName="MyServiceUnit")
+	EntityManager em;
+
+	public CustomTable findById(long id) {
+		return em.createNamedQuery("CustomTable.findInstance", CustomTable.class)
+		.setParameter("id", id)
+		.getSingleResult();
+}
+}</code></pre>
+	
+<h3>8.3 Understand native SQL queries</h3>
+<h3>8.4 Understand basic Criteria API queries</h3>
 
 <h2>9. Using the Java Persistence API Query Language</h2>
 
