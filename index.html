@@ -618,11 +618,18 @@ public class CustomTable {
 
 	<h3>8.2 Understand basic Java Persistence API query language queries</h3>
 	<ul>
-		<li>Very similar to SQL, except JPA works with entities (instead of columns).</li>
-		<li>Support for filtering by whole entity.</li>
-		<li>Parameters: positional (?1, ?2, etc.) or named (:foo, :hoo, etc), date/time parameters must be specified from enumeration TemporalType.</li>
+		<li>Very similar to SQL, except JPA works with entities (instead of columns), but:
+		<ul>
+			<li>Support for filtering by whole entity</li>
+			<li>Parameters: positional (?1, ?2, etc.) or named (:foo, :hoo, etc), date/time parameters must be specified from enumeration TemporalType.</li>
+			<li>Result can be bundled into new Object (object has to have appropriate constructor).</li>
+			<li></li>
+		</ul>
+		</li>
 		<li>Queries: dynamic (built in runtime), named (allowed only in entity class), executing (<font color="red">TODO - page 188</font>)</li>
-		<li></li>
+		<li>Methods (to execute queries): getSingleResult (to get one instance/row), getResultList (to get zero or more instances/rows), executeUpdate (for bulk data modification).</li>
+		<li>Read-only query: may be optimized avoiding transaction (not run in transaction) or set transaction to TransactionAttributeType.NOT_SUPPORTED.</li>
+		<li>Pagination: EM defines methods setFirstResult and setMaxResults for this purpose.</li>
 		<li></li>
 	</ul>
 	<pre class="prettyprint"><code class="language-java">@Entity
