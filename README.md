@@ -3,7 +3,7 @@ java-cert
 
 Java - Certification Study Notes
 
-Direct access is TODO.
+<strong>Attention: deprecated!!!</strong>
 
 It covers complete study notes to pass oracle JPA certification exam. Chapters are:
 - Overview of the Java Persistence API
